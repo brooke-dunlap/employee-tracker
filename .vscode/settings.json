@@ -1,0 +1,14 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "database": "company_db",
+            "username": "postgres",
+            "password": "Smallville21!",
+            "name": "Postgres -Employee Tracker"
+        }
+    ]
+}

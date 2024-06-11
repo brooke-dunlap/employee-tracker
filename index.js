@@ -45,13 +45,14 @@ async function viewAllEmployees(){
     menu();
 };
 
+//menu doesn't work for this function
 async function addEmployee(){
     const role = await pool.query('SELECT * FROM role');
     const roleChoices = role.rows.map(role => ({
     name: role.title,
     value: role.id,
   }));
-  const employees = await client.query('SELECT * FROM employee');
+  const employees = await pool.query('SELECT * FROM employee');
   const managerChoices = employees.rows.map(employee => ({
     name: `${employee.first_name} ${employee.last_name}`,
     value: employee.id,
@@ -61,29 +62,29 @@ async function addEmployee(){
         {
             type: 'input',
             message: `What is the employee's first name?`,
-            name: 'first-name',
+            name: 'firstName',
         },
         {
             type: 'input',
             message: `What is the employee's last name?`,
-            name: 'last-name',
+            name: 'lastName',
         },
         {
             type: 'input',
             message: `What is the employee's role?`,
-            name: 'employee-role',
+            name: 'employeeRole',
             choices: roleChoices,
         },
         {
             type: 'list',
             message: `Who is the employee's manager?`,
-            name: 'employee-manager',
+            name: 'manager',
             choices: managerChoices,
         },
     ])
-    .then((firstName, lastName, employeeRole, manager) => {
-        pool.query('INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ($1, $2, $3, $4)', [firstName, lastName, employeeRole, manager]);//fix this
-        console.log(`Added employee: ${firstName} ${lastName}`);
+    .then((answers) => {
+        pool.query('INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ($1, $2, $3, $4)', [answers.firstName, answers.lastName, answers.employeeRole, answers.manager]);//fix this
+        console.log(`Added employee: ${answers.firstName} ${answers.lastName}`);
         menu();
     });
 };
@@ -118,9 +119,9 @@ async function addRole(){
             choices: departmentChoices,
         },
     ])
-    .then((name, salary, department_id) => {
-        pool.query('INSERT INTO role (title, salary, department_id) VALUES ($1, $2, $3)', [name, salary, department_id]);// fixthis
-        console.log(`Added role: ${name}`);
+    .then((answers) => {
+        pool.query('INSERT INTO role (title, salary, department_id) VALUES ($1, $2, $3)', [answers.title, answers.salary, answers.department]);// fixthis
+        console.log(`Added role: ${answers.title}`);
         menu();
     });
 };
@@ -133,7 +134,7 @@ async function updateEmployeeRole(){
     }));
 
     const role = await pool.query('SELECT * FROM role')
-    const roleChoices = roles.rows.map(role => ({
+    const roleChoices = role.rows.map(role => ({
         name: role.title,
         value: role.id,
       }));
@@ -152,8 +153,8 @@ async function updateEmployeeRole(){
             choices: roleChoices,
         },
     ])
-    .then((employee_id, role_id) => {
-        pool.query('UPDATE employee SET role_id = $1 WHERE id = $2', [role_id, employee_id]);//need to fix
+    .then((answers) => {
+        pool.query('UPDATE employee SET role_id = $1 WHERE id = $2', [answers.role, answers.employee]);//need to fix
         console.log(`Updated employee's role`);
         menu();
     });
@@ -172,9 +173,9 @@ function addDepartment(){
             name: 'name',
         },
     ])
-    .then((name) => {
-        pool.query('INSERT INTO department (name) VALUES ($1)', [name]);
-        console.log(`Added department: ${name}`);
+    .then((answers) => {
+        pool.query('INSERT INTO department (name) VALUES ($1)', [answers.name]);
+        console.log(`Added department: ${answers.name}`);
         menu();
     });
 };

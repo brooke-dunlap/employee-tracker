@@ -1,4 +1,9 @@
 --@block
+TRUNCATE TABLE employee RESTART IDENTITY CASCADE;
+TRUNCATE TABLE role RESTART IDENTITY CASCADE;
+TRUNCATE TABLE department RESTART IDENTITY CASCADE;
+
+--@block
 INSERT INTO department (name)
 VALUES 
     ('Marketing'), 
@@ -6,7 +11,8 @@ VALUES
     ('Information Technology'), 
     ('Sales'), 
     ('Customer Service'),
-    ('Human Resources');
+    ('Human Resources')
+ON CONFLICT (name) DO NOTHING;
 
 --@block
 INSERT INTO role (title, salary, department_id)
@@ -24,25 +30,27 @@ VALUES
     ('human resources manager', 85000, 6),
     ('sales rep', 80000, 4),
     ('account manager', 90000, 4),
-    ('regional sales manager', 110000, 4);
+    ('regional sales manager', 110000, 4)
+ON CONFLICT (title) DO NOTHING; 
 
 --@block
-INSERT INTO employee (first_name, last_name, role_id)
+INSERT INTO employee (first_name, last_name, role_id, manager_id)
 VALUES
-    ('Sara', 'Pratt', 1),
-    ('Kole', 'Calhoun', 2),
-    ('Blaise', 'Mann', 3),
-    ('Kaiden', 'Allen', 4),
-    ('Will', 'Kirby', 5),
-    ('Ariya', 'Bush', 6),
-    ('Calvin', 'Edwards', 7),
-    ('Blake', 'Shepard', 8),
-    ('Emmeline', 'Nash', 9),
-    ('Asa', 'Lynch', 10),
-    ('Quinn', 'Holmes', 11),
-    ('Dani', 'Frye', 12),
-    ('Sarai', 'Cline', 13),
-    ('Luis', 'Richardson', 14),
-    ('Jeffery', 'Hammond', 6),
-    ('Kyle', 'Atkins', 6),
-    ('Adan', 'Guerra', 12);
+    ('Sara', 'Pratt', 1, NULL),
+    ('Kole', 'Calhoun', 2, NULL),
+    ('Blaise', 'Mann', 3, 1),
+    ('Kaiden', 'Allen', 4 ,2),
+    ('Will', 'Kirby', 5, NULL),
+    ('Ariya', 'Bush', 6, NULL),
+    ('Calvin', 'Edwards', 7 ,3),
+    ('Blake', 'Shepard', 8, NULL),
+    ('Emmeline', 'Nash', 9, NULL),
+    ('Asa', 'Lynch', 10, NULL),
+    ('Quinn', 'Holmes', 11, 4),
+    ('Dani', 'Frye', 12, NULL),
+    ('Sarai', 'Cline', 13, NULL),
+    ('Luis', 'Richardson', 14, 5),
+    ('Jeffery', 'Hammond', 6, NULL),
+    ('Kyle', 'Atkins', 6, NULL),
+    ('Adan', 'Guerra', 12, NULL)
+ON CONFLICT DO NOTHING;

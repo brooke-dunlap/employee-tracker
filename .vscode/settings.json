@@ -7,7 +7,7 @@
             "driver": "PostgreSQL",
             "database": "company_db",
             "username": "postgres",
-            "password": "Smallville21!",
+            "password": "password",
             "name": "Postgres -Employee Tracker"
         }
     ]
